@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://exclusivasex.com.br.git"
+    "url": "git+https://github.com/Guigass/lpapi-ionic-plugin.git"
   },
   "bugs": {
-    "url": "https://exclusivasex.com.br/issues"
+    "url": "https://github.com/Guigass/lpapi-ionic-plugin/issues"
   },
   "keywords": [
     "capacitor",
@@ -44,14 +44,14 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "^3.0.0",
-    "@capacitor/core": "^3.0.0",
+    "@capacitor/android": "^3.7.0",
+    "@capacitor/core": "^3.7.0",
     "@capacitor/docgen": "^0.0.18",
-    "@capacitor/ios": "^3.0.0",
+    "@capacitor/ios": "^3.7.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
-    "@capacitor/cli": "^3.0.1",
+    "@capacitor/cli": "^3.7.0",
     "eslint": "^7.11.0",
     "prettier": "~2.2.0",
     "prettier-plugin-java": "~1.0.0",
@@ -77,4 +77,3 @@
     }
   }
 }
-
