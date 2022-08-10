@@ -52,7 +52,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation files('D:\\Projetos\\ExclusivaAppEstoqueSite\\customPlugins\\lpapi-plugin\\android\\LPAPI-2021-02-02-R.jar')
+    implementation files('LPAPI-2021-02-02-R.jar')
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

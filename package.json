@@ -1,6 +1,6 @@
 {
   "name": "lpapi-ionic-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "LPAPI - Plugin de Ionic para comunicar com impressora importadas do aliexpress InniFun",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
