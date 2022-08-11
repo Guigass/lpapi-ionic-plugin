@@ -1,8 +1,12 @@
 package com.exclusivasex.lpapi;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -62,6 +66,10 @@ public class LpapiPluginPlugin extends Plugin {
 
   @PluginMethod
   public void getPairedPrinters(PluginCall call) {
+    if (!checkBlePermission(1)) {
+      return;
+    }
+
     pairedPrinters = api.getAllPrinterAddresses(null);
 
     JSArray jsArray = new JSArray();
@@ -84,13 +92,17 @@ public class LpapiPluginPlugin extends Plugin {
   @RequiresApi(api = Build.VERSION_CODES.N)
   @PluginMethod
   public void connectPrinter(PluginCall call) {
+    if (!checkBlePermission(2)) {
+      return;
+    }
+
     String name = call.getString("name");
     String address = call.getString("address");
 
     mPrinterAddress = pairedPrinters.stream()
-      .filter(printer -> address.equals(printer.macAddress))
-      .findAny()
-      .orElse(null);
+            .filter(printer -> address.equals(printer.macAddress))
+            .findAny()
+            .orElse(null);
 
     api.openPrinterByAddress(mPrinterAddress);
 
@@ -106,11 +118,20 @@ public class LpapiPluginPlugin extends Plugin {
 
   @PluginMethod
   public void printText(PluginCall call) {
-    String text = "1234567890";
+    String text = call.getString("text");
+    double x = call.getDouble("x");
+    double y = call.getDouble("y");
+    double width = call.getDouble("width");
+    double height = call.getDouble("height");
+    double textHeight = call.getDouble("textHeight");
+    double labelWidth = call.getDouble("labelWidth");
+    double labelHeight = call.getDouble("labelHeight");
 
     api.startJob(48, 50, 0);
 
-    api.drawText(text, 4, 5, 40, 40, 4);
+    api.startJob(labelWidth, labelHeight, 0);
+    api.drawText(text, x, y, width, height, textHeight);
+
     api.commitJob();
 
     call.resolve();
@@ -146,5 +167,30 @@ public class LpapiPluginPlugin extends Plugin {
     notifyListeners("PrinterState", ret);
 
     call.resolve();
+  }
+
+  private boolean checkBlePermission(int requestCode){
+    if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.BLUETOOTH_CONNECT}, requestCode);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  //@Override
+  private void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    super.getActivity().onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      switch (requestCode) {
+        case 1:
+          if (permissions[0].equals(Manifest.permission.BLUETOOTH_CONNECT)) {
+            getPairedPrinters(null);
+          }
+          break;
+      }
+    }
   }
 }
